@@ -1,22 +1,41 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spin Diskon UMKM 🎡</title>
   <link rel="icon" href="data:,">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body class="min-h-screen flex items-center justify-center p-4">
+
+  <!-- Theme Toggle -->
+  <div class="theme-toggle">
+    <button class="theme-btn" onclick="toggleTheme()" title="Toggle Theme">
+      <i class="fas fa-moon" id="theme-icon"></i>
+    </button>
+  </div>
 
   <!-- Login Section -->
-  <div id="login-section" class="bg-white shadow-xl rounded-xl p-6 w-[360px] text-center">
-    <h1 class="text-2xl font-bold mb-2">🎡 Spin Diskon UMKM</h1>
-    <p class="text-gray-600 mb-6 text-sm">Login dengan Google untuk memulai</p>
+  <div id="login-section" class="glass-card p-8 w-full max-w-md text-center animate-scale-in">
     
+    <!-- Logo/Icon -->
+    <div class="mb-6">
+      <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center animate-float">
+        <i class="fas fa-ticket text-4xl text-white"></i>
+      </div>
+      <h1 class="text-3xl font-bold text-gradient">Spin Diskon</h1>
+      <p class="text-secondary mt-2">UMKM Festival 2024</p>
+    </div>
+
+    <p class="text-secondary mb-6">Masuk dengan Google untuk mulai bermain dan menangkan voucher diskon menarik!</p>
+    
+    <!-- Google Sign-In -->
     <div id="g_id_onload"
-         data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+         data-client_id="88663261491-uugvuvfgrq20ftg481k1l6evouh98uon.apps.googleusercontent.com"
          data-context="signin"
          data-ux_mode="popup"
          data-callback="handleGoogleCredentialResponse"
@@ -29,92 +48,135 @@
          data-theme="outline"
          data-text="signin_with"
          data-size="large"
-         data-width="100%"
          data-logo_alignment="left">
     </div>
 
-    <div id="auth-error" class="hidden mt-4 text-red-600 text-sm"></div>
+    <div id="auth-error" class="hidden mt-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm"></div>
     
-    <p class="text-xs text-gray-400 mt-4">
-      Dengan login, Anda setuju dengan syarat dan ketentuan
-    </p>
+    <!-- Decorative elements -->
+    <div class="mt-6 pt-6 border-t border-white/10">
+      <p class="text-xs text-muted">
+        <i class="fas fa-shield-alt mr-1"></i>
+        Login aman & terjamin privasinya
+      </p>
+    </div>
   </div>
 
   <!-- Registration Section -->
-  <div id="register-section" class="hidden bg-white shadow-xl rounded-xl p-6 w-[400px]">
-    <h1 class="text-2xl font-bold mb-2 text-center">📝 Registrasi</h1>
-    <p class="text-gray-600 mb-4 text-sm text-center">Silakan lengkapi data diri Anda</p>
+  <div id="register-section" class="hidden glass-card p-8 w-full max-w-md animate-scale-in">
+    <div class="text-center mb-6">
+      <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-500 via-cyan-500 to-blue-500 flex items-center justify-center animate-float">
+        <i class="fas fa-user-plus text-3xl text-white"></i>
+      </div>
+      <h2 class="text-2xl font-bold">Daftar Sekarang</h2>
+      <p class="text-secondary mt-2 text-sm">Lengkapi data diri Anda</p>
+    </div>
     
     <!-- Google Info -->
-    <div class="bg-gray-50 rounded-lg p-3 mb-4 flex items-center gap-3">
-      <img id="register-avatar" src="" alt="Avatar" class="w-12 h-12 rounded-full">
-      <div>
-        <div id="register-name" class="font-medium"></div>
-        <div id="register-email" class="text-sm text-gray-500"></div>
+    <div class="glass-card p-4 mb-6 flex items-center gap-4">
+      <img id="register-avatar" src="" alt="Avatar" class="avatar avatar-sm">
+      <div class="text-left">
+        <div id="register-name" class="font-semibold"></div>
+        <div id="register-email" class="text-sm text-muted"></div>
       </div>
     </div>
 
-    <form id="register-form" class="space-y-3">
+    <form id="register-form" class="space-y-4">
       <!-- Role Selection -->
-      <div>
-        <label class="block text-sm font-medium mb-1">Saya adalah *</label>
-        <select id="role" name="role" required class="w-full border p-2 rounded">
+      <div class="input-group">
+        <label class="block text-sm font-medium mb-2 text-left">
+          <i class="fas fa-user-tag mr-2 text-indigo-400"></i>Saya adalah *
+        </label>
+        <select id="role" name="role" required class="select">
           <option value="">Pilih role...</option>
-          <option value="siswa">Siswa</option>
-          <option value="guru">Guru/Karyawan</option>
-          <option value="mitra">Mitra (UMKM)</option>
+          <option value="siswa">🎓 Siswa</option>
+          <option value="guru">👨‍🏫 Guru/Karyawan</option>
+          <option value="mitra">🏪 Mitra (UMKM)</option>
         </select>
       </div>
 
       <!-- WhatsApp -->
-      <div>
-        <label class="block text-sm font-medium mb-1">Nomor WhatsApp *</label>
-        <input type="text" id="noWa" name="noWa" required placeholder="08xxxxxxxxxx" class="w-full border p-2 rounded">
+      <div class="input-group">
+        <input type="text" id="noWa" name="noWa" required placeholder="Nomor WhatsApp" class="input">
+        <i class="input-icon fas fa-phone"></i>
       </div>
 
       <!-- Kelas (for siswa) -->
-      <div id="kelas-field" class="hidden">
-        <label class="block text-sm font-medium mb-1">Kelas</label>
-        <input type="text" id="kelas" name="kelas" placeholder="XII IPA 1" class="w-full border p-2 rounded">
+      <div id="kelas-field" class="hidden input-group">
+        <label class="block text-sm font-medium mb-2 text-left">
+          <i class="fas fa-school mr-2 text-green-400"></i>Kelas
+        </label>
+        <input type="text" id="kelas" name="kelas" placeholder="Contoh: XII IPA 1" class="input">
+        <i class="input-icon fas fa-door-open"></i>
       </div>
 
       <!-- Sekolah (optional) -->
-      <div id="sekolah-field" class="hidden">
-        <label class="block text-sm font-medium mb-1">Sekolah (Opsional)</label>
-        <input type="text" id="sekolah" name="sekolah" placeholder="SMA Negeri 1..." class="w-full border p-2 rounded">
+      <div id="sekolah-field" class="hidden input-group">
+        <label class="block text-sm font-medium mb-2 text-left">
+          <i class="fas fa-building mr-2 text-purple-400"></i>Sekolah (Opsional)
+        </label>
+        <input type="text" id="sekolah" name="sekolah" placeholder="Nama sekolah" class="input">
+        <i class="input-icon fas fa-university"></i>
       </div>
 
       <!-- MITRA Fields -->
-      <div id="mitra-fields" class="hidden space-y-3">
-        <div>
-          <label class="block text-sm font-medium mb-1">Nama Toko/UMKM *</label>
-          <input type="text" id="namaMitra" name="namaMitra" placeholder="Nama toko Anda" class="w-full border p-2 rounded">
+      <div id="mitra-fields" class="hidden space-y-4">
+        <div class="input-group">
+          <label class="block text-sm font-medium mb-2 text-left">
+            <i class="fas fa-store mr-2 text-orange-400"></i>Nama Toko/UMKM *
+          </label>
+          <input type="text" id="namaMitra" name="namaMitra" placeholder="Nama toko Anda" class="input">
+          <i class="input-icon fas fa-shopping-bag"></i>
         </div>
-        <div>
-          <label class="block text-sm font-medium mb-1">Kategori *</label>
-          <select id="kategori" name="kategori" class="w-full border p-2 rounded">
+        <div class="input-group">
+          <label class="block text-sm font-medium mb-2 text-left">
+            <i class="fas fa-tags mr-2 text-pink-400"></i>Kategori *
+          </label>
+          <select id="kategori" name="kategori" class="select">
             <option value="">Pilih kategori...</option>
-            <option value="makanan">Makanan</option>
-            <option value="minuman">Minuman</option>
+            <option value="makanan">🍔 Makanan</option>
+            <option value="minuman">🥤 Minuman</option>
+            <option value="jasa">🔧 Jasa</option>
+            <option value="lainnya">📦 Lainnya</option>
           </select>
         </div>
-        <div>
-          <label class="block text-sm font-medium mb-1">Alamat *</label>
-          <textarea id="alamat" name="alamat" placeholder="Alamat toko" class="w-full border p-2 rounded"></textarea>
+        <div class="input-group">
+          <label class="block text-sm font-medium mb-2 text-left">
+            <i class="fas fa-map-marker-alt mr-2 text-red-400"></i>Alamat *
+          </label>
+          <textarea id="alamat" name="alamat" placeholder="Alamat toko" class="textarea"></textarea>
         </div>
       </div>
 
-      <div id="register-error" class="hidden text-red-600 text-sm"></div>
+      <div id="register-error" class="hidden p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm"></div>
 
-      <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded font-medium">
+      <button type="submit" class="btn btn-primary w-full">
+        <i class="fas fa-rocket"></i>
         Daftar Sekarang
       </button>
       
-      <button type="button" id="cancel-register" class="w-full border border-gray-300 text-gray-600 py-2 rounded hover:bg-gray-50">
+      <button type="button" id="cancel-register" class="btn btn-secondary w-full">
+        <i class="fas fa-arrow-left"></i>
         Batal
       </button>
     </form>
   </div>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      const html = document.documentElement;
+      const icon = document.getElementById('theme-icon');
+      
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.setAttribute('data-theme', 'light');
+        icon.className = 'fas fa-sun';
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        icon.className = 'fas fa-moon';
+      }
+    }
+  </script>
 
   <script type="module">
     import googleAuth from './js/auth/googleAuth.js';
@@ -243,4 +305,3 @@
 
 </body>
 </html>
-
