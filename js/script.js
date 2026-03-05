@@ -126,15 +126,13 @@ STATE.spinning=true;
 
 try{
 
-const res = await fetch(API_URL,{
-method:"POST",
-body:JSON.stringify({
-customerId:getCustomerId(),
-wa:wa
-})
-});
+const url = API_URL +
+"?wa="+encodeURIComponent(wa)+
+"&cid="+encodeURIComponent(getCustomerId());
 
-const data=await res.json();
+const res = await fetch(url);
+
+const data = await res.json();
 
 if(data.error){
 
@@ -242,3 +240,4 @@ STATE.spinning=false;
 
 
 }
+
