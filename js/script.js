@@ -3,9 +3,7 @@ const API_URL="https://script.google.com/macros/s/AKfycbzoapuRNn9OeliSHt3s_DtbzD
 const CONFIG={
 size:300,
 slices:[
-"ZONK",
-"ZONK",
-"ZONK",
+"ZONK","ZONK","ZONK",
 "DISC5",
 "ZONK",
 "DISC10",
@@ -15,16 +13,9 @@ slices:[
 "DISC20"
 ],
 colors:[
-"#ef4444",
-"#f97316",
-"#eab308",
-"#22c55e",
-"#3b82f6",
-"#6366f1",
-"#a855f7",
-"#ec4899",
-"#14b8a6",
-"#64748b"
+"#ef4444","#f97316","#eab308","#22c55e",
+"#3b82f6","#6366f1","#a855f7","#ec4899",
+"#14b8a6","#64748b"
 ]
 };
 
@@ -87,14 +78,14 @@ ctx.restore();
 
 function getCustomerId(){
 
-let id=localStorage.getItem("cid");
+let cid=localStorage.getItem("cid");
 
-if(!id){
-id="CUST-"+Math.random().toString(36).substring(2,8);
-localStorage.setItem("cid",id);
+if(!cid){
+cid="CUST-"+Math.random().toString(36).substring(2,8);
+localStorage.setItem("cid",cid);
 }
 
-return id;
+return cid;
 }
 
 function startGame(){
@@ -126,29 +117,33 @@ STATE.spinning=true;
 
 try{
 
-const url = API_URL +
-"?wa="+encodeURIComponent(wa)+
-"&cid="+encodeURIComponent(getCustomerId());
+const payload={
+wa:wa,
+cid:getCustomerId()
+};
 
-const res = await fetch(url);
+const res=await fetch(API_URL,{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify(payload)
+});
 
-const data = await res.json();
+const data=await res.json();
 
 if(data.error){
-
 alert("Sudah main hari ini");
 STATE.spinning=false;
 return;
-
 }
 
 animateSpin(data);
 
-}catch(e){
+}catch(err){
 
-console.error(e);
+console.error(err);
 alert("Server error");
-
 STATE.spinning=false;
 
 }
@@ -158,7 +153,6 @@ STATE.spinning=false;
 function animateSpin(data){
 
 const slices=CONFIG.slices;
-
 const result=data.result;
 
 const index=slices.indexOf(result);
@@ -184,13 +178,9 @@ const deg=(spin*progress)/duration;
 drawRotated(deg);
 
 if(progress<duration){
-
 requestAnimationFrame(frame);
-
 }else{
-
 showResult(data);
-
 }
 
 }
@@ -203,7 +193,6 @@ function drawRotated(deg){
 
 const ctx=STATE.ctx;
 const size=CONFIG.size;
-
 const center=size/2;
 
 ctx.clearRect(0,0,size,size);
@@ -238,6 +227,4 @@ el.innerHTML=
 
 STATE.spinning=false;
 
-
 }
-
