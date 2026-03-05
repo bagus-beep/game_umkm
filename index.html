@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Spin Diskon UMKM 🎡</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+<div class="bg-white shadow-xl rounded-xl p-6 w-[360px] text-center">
+
+<h1 class="text-2xl font-bold mb-4">
+🎡 Spin Diskon UMKM
+</h1>
+
+<input 
+id="wa"
+type="text"
+placeholder="Masukkan WhatsApp"
+class="border p-2 rounded w-full mb-3"
+/>
+
+<button
+onclick="startGame()"
+class="bg-blue-500 text-white px-4 py-2 rounded w-full mb-4"
+>
+Mulai
+</button>
+
+<div class="relative flex justify-center">
+
+<canvas id="wheel" width="300" height="300" class="border rounded-full"></canvas>
+
+<div class="absolute top-[-5px] text-red-600 text-2xl">
+▼
+</div>
+
+</div>
+
+<button
+onclick="spinWheel()"
+class="bg-green-500 text-white px-4 py-2 rounded w-full mt-4"
+>
+SPIN
+</button>
+
+<div id="result" class="mt-4 font-bold text-lg"></div>
+
+</div>
+
+<script src="js/script.js"></script>
+
+</body>
+</html>
