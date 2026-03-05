@@ -1,56 +1,246 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>Spin Diskon UMKM 🎡</title>
-<link rel="icon" href="data:,">
-<script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <title>Spin Diskon UMKM 🎡</title>
+  <link rel="icon" href="data:,">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-<div class="bg-white shadow-xl rounded-xl p-6 w-[360px] text-center">
+  <!-- Login Section -->
+  <div id="login-section" class="bg-white shadow-xl rounded-xl p-6 w-[360px] text-center">
+    <h1 class="text-2xl font-bold mb-2">🎡 Spin Diskon UMKM</h1>
+    <p class="text-gray-600 mb-6 text-sm">Login dengan Google untuk memulai</p>
+    
+    <div id="g_id_onload"
+         data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+         data-context="signin"
+         data-ux_mode="popup"
+         data-callback="handleGoogleCredentialResponse"
+         data-auto_prompt="false">
+    </div>
 
-<h1 class="text-2xl font-bold mb-4">
-🎡 Spin Diskon UMKM
-</h1>
+    <div class="g_id_signin"
+         data-type="standard"
+         data-shape="rectangular"
+         data-theme="outline"
+         data-text="signin_with"
+         data-size="large"
+         data-width="100%"
+         data-logo_alignment="left">
+    </div>
 
-<input 
-id="wa"
-type="text"
-placeholder="Masukkan WhatsApp"
-class="border p-2 rounded w-full mb-3"
-/>
+    <div id="auth-error" class="hidden mt-4 text-red-600 text-sm"></div>
+    
+    <p class="text-xs text-gray-400 mt-4">
+      Dengan login, Anda setuju dengan syarat dan ketentuan
+    </p>
+  </div>
 
-<button
-onclick="startGame()"
-class="bg-blue-500 text-white px-4 py-2 rounded w-full mb-4"
->
-Mulai
-</button>
+  <!-- Registration Section -->
+  <div id="register-section" class="hidden bg-white shadow-xl rounded-xl p-6 w-[400px]">
+    <h1 class="text-2xl font-bold mb-2 text-center">📝 Registrasi</h1>
+    <p class="text-gray-600 mb-4 text-sm text-center">Silakan lengkapi data diri Anda</p>
+    
+    <!-- Google Info -->
+    <div class="bg-gray-50 rounded-lg p-3 mb-4 flex items-center gap-3">
+      <img id="register-avatar" src="" alt="Avatar" class="w-12 h-12 rounded-full">
+      <div>
+        <div id="register-name" class="font-medium"></div>
+        <div id="register-email" class="text-sm text-gray-500"></div>
+      </div>
+    </div>
 
-<div class="relative flex justify-center">
+    <form id="register-form" class="space-y-3">
+      <!-- Role Selection -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Saya adalah *</label>
+        <select id="role" name="role" required class="w-full border p-2 rounded">
+          <option value="">Pilih role...</option>
+          <option value="siswa">Siswa</option>
+          <option value="guru">Guru/Karyawan</option>
+          <option value="mitra">Mitra (UMKM)</option>
+        </select>
+      </div>
 
-<canvas id="wheel" width="300" height="300" class="border rounded-full"></canvas>
+      <!-- WhatsApp -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Nomor WhatsApp *</label>
+        <input type="text" id="noWa" name="noWa" required placeholder="08xxxxxxxxxx" class="w-full border p-2 rounded">
+      </div>
 
-<div class="absolute top-[-5px] text-red-600 text-2xl">
-▼
-</div>
+      <!-- Kelas (for siswa) -->
+      <div id="kelas-field" class="hidden">
+        <label class="block text-sm font-medium mb-1">Kelas</label>
+        <input type="text" id="kelas" name="kelas" placeholder="XII IPA 1" class="w-full border p-2 rounded">
+      </div>
 
-</div>
+      <!-- Sekolah (optional) -->
+      <div id="sekolah-field" class="hidden">
+        <label class="block text-sm font-medium mb-1">Sekolah (Opsional)</label>
+        <input type="text" id="sekolah" name="sekolah" placeholder="SMA Negeri 1..." class="w-full border p-2 rounded">
+      </div>
 
-<button
-onclick="spinWheel()"
-class="bg-green-500 text-white px-4 py-2 rounded w-full mt-4"
->
-SPIN
-</button>
+      <!-- MITRA Fields -->
+      <div id="mitra-fields" class="hidden space-y-3">
+        <div>
+          <label class="block text-sm font-medium mb-1">Nama Toko/UMKM *</label>
+          <input type="text" id="namaMitra" name="namaMitra" placeholder="Nama toko Anda" class="w-full border p-2 rounded">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Kategori *</label>
+          <select id="kategori" name="kategori" class="w-full border p-2 rounded">
+            <option value="">Pilih kategori...</option>
+            <option value="makanan">Makanan</option>
+            <option value="minuman">Minuman</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Alamat *</label>
+          <textarea id="alamat" name="alamat" placeholder="Alamat toko" class="w-full border p-2 rounded"></textarea>
+        </div>
+      </div>
 
-<div id="result" class="mt-4 font-bold text-lg"></div>
+      <div id="register-error" class="hidden text-red-600 text-sm"></div>
 
-</div>
+      <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded font-medium">
+        Daftar Sekarang
+      </button>
+      
+      <button type="button" id="cancel-register" class="w-full border border-gray-300 text-gray-600 py-2 rounded hover:bg-gray-50">
+        Batal
+      </button>
+    </form>
+  </div>
 
-<script src="js/script.js"></script>
+  <script type="module">
+    import googleAuth from './js/auth/googleAuth.js';
+
+    // Initialize auth
+    googleAuth.init();
+
+    // Global callback for Google Sign-In
+    window.handleGoogleCredentialResponse = async (response) => {
+      await googleAuth.handleCredentialResponse(response);
+    };
+
+    // Handle auth state changes
+    googleAuth.onAuthChange((user, extra) => {
+      if (user) {
+        // User registered - redirect handled by module
+      } else if (extra && extra.needRegister) {
+        // Show registration form
+        showRegisterForm(extra.googleUser);
+      } else {
+        showLoginSection();
+      }
+    });
+
+    // Check if already logged in
+    if (googleAuth.isLoggedIn()) {
+      googleAuth.routeToDashboard(googleAuth.getRole());
+    }
+
+    // Show login section
+    function showLoginSection() {
+      document.getElementById('login-section').classList.remove('hidden');
+      document.getElementById('register-section').classList.add('hidden');
+    }
+
+    // Show register form
+    function showRegisterForm(googleUser) {
+      document.getElementById('login-section').classList.add('hidden');
+      document.getElementById('register-section').classList.remove('hidden');
+      
+      // Fill Google info
+      document.getElementById('register-avatar').src = googleUser.picture;
+      document.getElementById('register-name').textContent = googleUser.name;
+      document.getElementById('register-email').textContent = googleUser.email;
+      
+      // Clear form
+      document.getElementById('register-form').reset();
+      toggleFields();
+    }
+
+    // Toggle fields based on role
+    document.getElementById('role').addEventListener('change', toggleFields);
+
+    function toggleFields() {
+      const role = document.getElementById('role').value;
+      
+      // Reset all
+      document.getElementById('kelas-field').classList.add('hidden');
+      document.getElementById('sekolah-field').classList.add('hidden');
+      document.getElementById('mitra-fields').classList.add('hidden');
+      
+      if (role === 'siswa') {
+        document.getElementById('kelas-field').classList.remove('hidden');
+        document.getElementById('sekolah-field').classList.remove('hidden');
+      } else if (role === 'guru') {
+        document.getElementById('sekolah-field').classList.remove('hidden');
+      } else if (role === 'mitra') {
+        document.getElementById('mitra-fields').classList.remove('hidden');
+      }
+    }
+
+    // Handle form submission
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const role = document.getElementById('role').value;
+      const noWa = document.getElementById('noWa').value.trim();
+      const kelas = document.getElementById('kelas').value.trim();
+      const sekolah = document.getElementById('sekolah').value.trim();
+      const namaMitra = document.getElementById('namaMitra').value.trim();
+      const kategori = document.getElementById('kategori').value;
+      const alamat = document.getElementById('alamat').value.trim();
+
+      if (!role || !noWa) {
+        showRegisterError('Mohon lengkapi semua data wajib');
+        return;
+      }
+
+      if (role === 'mitra' && (!namaMitra || !kategori || !alamat)) {
+        showRegisterError('Mohon lengkapi data toko');
+        return;
+      }
+
+      const userData = {
+        role: role,
+        noWa: noWa,
+        kelas: kelas,
+        sekolah: sekolah,
+        namaMitra: namaMitra,
+        kategori: kategori,
+        alamat: alamat
+      };
+
+      const result = await googleAuth.register(userData);
+      
+      if (!result.success) {
+        showRegisterError(result.message);
+      }
+    });
+
+    // Cancel registration
+    document.getElementById('cancel-register').addEventListener('click', () => {
+      showLoginSection();
+      // Clear Google user
+      if (window.google?.accounts?.identity) {
+        window.google.accounts.identity.disableAutoSelect();
+      }
+    });
+
+    function showRegisterError(message) {
+      const errorEl = document.getElementById('register-error');
+      errorEl.textContent = message;
+      errorEl.classList.remove('hidden');
+    }
+  </script>
 
 </body>
 </html>
+

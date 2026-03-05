@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Siswa - Spin Diskon UMKM</title>
+  <link rel="icon" href="data:,">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-green-600 text-white p-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold">🎡 Dashboard Siswa</h1>
+      <div class="flex items-center gap-3">
+        <img id="user-avatar" src="" alt="Avatar" class="w-8 h-8 rounded-full border-2 border-white">
+        <span id="user-name" class="text-sm"></span>
+        <button id="logout-btn" class="ml-2 bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-sm">
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto p-6">
+    
+    <!-- Welcome Card -->
+    <div class="bg-white rounded-xl shadow p-6 mb-6">
+      <h2 class="text-2xl font-bold mb-2">Halo, <span id="user-greeting">Siswa</span>! 👋</h2>
+      <p class="text-gray-600">Mainkan wheel dan menangi diskon menarik!</p>
+    </div>
+
+    <!-- Spin Game Section -->
+    <div class="bg-white rounded-xl shadow p-6 mb-6">
+      <h3 class="text-lg font-bold mb-4 text-center">🎰 Main Spin</h3>
+      
+      <div class="max-w-sm mx-auto">
+        <input 
+          id="wa"
+          type="text"
+          placeholder="Masukkan Nomor WhatsApp"
+          class="border p-3 rounded w-full mb-4 text-center"
+        />
+
+        <button
+          onclick="startGame()"
+          class="bg-blue-500 text-white px-4 py-2 rounded w-full mb-4 font-medium"
+        >
+          Siapkan Nomor
+        </button>
+
+        <div class="relative flex justify-center mb-4">
+          <canvas id="wheel" width="300" height="300" class="border rounded-full"></canvas>
+          <div class="absolute top-[-5px] text-red-600 text-2xl">▼</div>
+        </div>
+
+        <button
+          onclick="spinWheel()"
+          class="bg-green-500 text-white px-4 py-3 rounded w-full font-bold text-lg"
+        >
+          SPIN SEKARANG!
+        </button>
+
+        <div id="result" class="mt-4 font-bold text-lg text-center"></div>
+      </div>
+    </div>
+
+    <!-- My Vouchers -->
+    <div class="bg-white rounded-xl shadow p-6">
+      <h3 class="text-lg font-bold mb-4">🎫 Voucher Saya</h3>
+      <div id="voucher-list" class="space-y-3">
+        <p class="text-gray-500 text-center py-4">Belum ada voucher</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script type="module">
+    import googleAuth from './js/auth/googleAuth.js';
+
+    // Check auth
+    if (!googleAuth.isLoggedIn() || googleAuth.getRole() !== 'siswa') {
+      alert('Akses ditolak. Silakan login sebagai siswa.');
+      window.location.href = 'index.html';
+    }
+
+    const user = googleAuth.getUser();
+    
+    // Display user info
+    document.getElementById('user-avatar').src = user.picture;
+    document.getElementById('user-name').textContent = user.name;
+    document.getElementById('user-greeting').textContent = user.name || 'Siswa';
+
+    // Logout
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      googleAuth.logout();
+    });
+  </script>
+
+  <script src="js/script.js"></script>
+
+</body>
+</html>
+

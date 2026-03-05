@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Guru/Karyawan - Spin Diskon UMKM</title>
+  <link rel="icon" href="data:,">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-orange-600 text-white p-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold">🎡 Dashboard Guru/Karyawan</h1>
+      <div class="flex items-center gap-3">
+        <img id="user-avatar" src="" alt="Avatar" class="w-8 h-8 rounded-full border-2 border-white">
+        <span id="user-name" class="text-sm"></span>
+        <button id="logout-btn" class="ml-2 bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-sm">
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto p-6">
+    
+    <!-- Welcome Card -->
+    <div class="bg-white rounded-xl shadow p-6 mb-6">
+      <h2 class="text-2xl font-bold mb-2">Halo, Bapak/Ibu Guru! 👨‍🏫</h2>
+      <p class="text-gray-600">Kelola kelas dan lihat progres belajar siswa</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div class="bg-white rounded-xl shadow p-4">
+        <div class="text-gray-500 text-sm">Total Siswa</div>
+        <div class="text-3xl font-bold text-blue-600" id="stat-siswa">0</div>
+      </div>
+      <div class="bg-white rounded-xl shadow p-4">
+        <div class="text-gray-500 text-sm">Siswa Main Hari Ini</div>
+        <div class="text-3xl font-bold text-green-600" id="stat-today">0</div>
+      </div>
+      <div class="bg-white rounded-xl shadow p-4">
+        <div class="text-gray-500 text-sm">Total Voucher Ditebus</div>
+        <div class="text-3xl font-bold text-purple-600" id="stat-redeemed">0</div>
+      </div>
+      <div class="bg-white rounded-xl shadow p-4">
+        <div class="text-gray-500 text-sm">Rata-rata Diskon</div>
+        <div class="text-3xl font-bold text-orange-600" id="stat-avg">10%</div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="bg-white rounded-xl shadow p-6 mb-6">
+      <h3 class="text-lg font-bold mb-4">Aksi Cepat</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <button class="bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg font-medium">
+          👥 Kelola Siswa
+        </button>
+        <button class="bg-green-500 hover:bg-green-600 text-white py-3 px-4 rounded-lg font-medium">
+          📊 Laporan Kelas
+        </button>
+        <button class="bg-purple-500 hover:bg-purple-600 text-white py-3 px-4 rounded-lg font-medium">
+          🎁 Buat Voucher
+        </button>
+        <button class="bg-orange-500 hover:bg-orange-600 text-white py-3 px-4 rounded-lg font-medium">
+          ⚙️ Pengaturan
+        </button>
+      </div>
+    </div>
+
+    <!-- Student Activity -->
+    <div class="bg-white rounded-xl shadow p-6">
+      <h3 class="text-lg font-bold mb-4">📈 Aktivitas Siswa</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="border-b">
+              <th class="pb-2">Nama Siswa</th>
+              <th class="pb-2">Email</th>
+              <th class="pb-2">Terakhir Main</th>
+              <th class="pb-2">Total Main</th>
+              <th class="pb-2">Total Diskon</th>
+            </tr>
+          </thead>
+          <tbody id="student-table">
+            <tr>
+              <td colspan="5" class="py-4 text-center text-gray-500">Memuat data...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <script type="module">
+    import googleAuth from './js/auth/googleAuth.js';
+
+    // Check auth
+    if (!googleAuth.isLoggedIn() || googleAuth.getRole() !== 'guru') {
+      alert('Akses ditolak. Silakan login sebagai guru/karyawan.');
+      window.location.href = 'index.html';
+    }
+
+    const user = googleAuth.getUser();
+    
+    // Display user info
+    document.getElementById('user-avatar').src = user.picture;
+    document.getElementById('user-name').textContent = user.name;
+
+    // Logout
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      googleAuth.logout();
+    });
+
+    // Load dashboard data
+    async function loadDashboard() {
+      // Placeholder - integrate with backend API
+      document.getElementById('stat-siswa').textContent = '0';
+      document.getElementById('stat-today').textContent = '0';
+      document.getElementById('stat-redeemed').textContent = '0';
+    }
+
+    loadDashboard();
+  </script>
+
+</body>
+</html>
+
