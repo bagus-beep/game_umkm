@@ -1,81 +1,172 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Siswa - Spin Diskon UMKM</title>
   <link rel="icon" href="data:,">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body class="bg-gray-100 min-h-screen">
+<body class="min-h-screen">
 
   <!-- Header -->
-  <header class="bg-green-600 text-white p-4 shadow-lg">
-    <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-xl font-bold">🎡 Dashboard Siswa</h1>
-      <div class="flex items-center gap-3">
-        <img id="user-avatar" src="" alt="Avatar" class="w-8 h-8 rounded-full border-2 border-white">
-        <span id="user-name" class="text-sm"></span>
-        <button id="logout-btn" class="ml-2 bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-sm">
-          Logout
+  <header class="glass-card border-b border-white/10">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center">
+          <i class="fas fa-ticket text-white"></i>
+        </div>
+        <h1 class="text-xl font-bold">Spin Diskon <span class="text-gradient">UMKM</span></h1>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <!-- Theme Toggle -->
+        <button class="theme-btn" onclick="toggleTheme()" title="Toggle Theme">
+          <i class="fas fa-moon" id="theme-icon"></i>
         </button>
+        
+        <!-- User Menu -->
+        <div class="flex items-center gap-3 glass-card px-4 py-2">
+          <img id="user-avatar" src="" alt="Avatar" class="w-8 h-8 rounded-full">
+          <span id="user-name" class="font-medium text-sm"></span>
+          <button id="logout-btn" class="text-red-400 hover:text-red-300 ml-2">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </div>
       </div>
     </div>
   </header>
 
   <!-- Main Content -->
-  <main class="container mx-auto p-6">
+  <main class="container mx-auto px-6 py-8">
     
     <!-- Welcome Card -->
-    <div class="bg-white rounded-xl shadow p-6 mb-6">
-      <h2 class="text-2xl font-bold mb-2">Halo, <span id="user-greeting">Siswa</span>! 👋</h2>
-      <p class="text-gray-600">Mainkan wheel dan menangi diskon menarik!</p>
+    <div class="glass-card p-8 mb-8 animate-fade-in-up">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-3xl font-bold mb-2">Hai, <span id="welcome-name" class="text-gradient"></span>! 👋</h2>
+          <p class="text-secondary">Siap mencoba keberuntunganmu hari ini?</p>
+        </div>
+        <div class="hidden md:block">
+          <div class="w-24 h-24 rounded-full bg-gradient-to-br from-green-400 via-cyan-400 to-blue-500 flex items-center justify-center animate-float">
+            <i class="fas fa-dice text-4xl text-white"></i>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Spin Game Section -->
-    <div class="bg-white rounded-xl shadow p-6 mb-6">
-      <h3 class="text-lg font-bold mb-4 text-center">🎰 Main Spin</h3>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       
-      <div class="max-w-sm mx-auto">
-        <input 
-          id="wa"
-          type="text"
-          placeholder="Masukkan Nomor WhatsApp"
-          class="border p-3 rounded w-full mb-4 text-center"
-        />
+      <!-- Wheel Section -->
+      <div class="glass-card p-8 animate-fade-in-up delay-1">
+        <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+          <i class="fas fa-circle-notch text-indigo-400"></i>
+          Spin & Menang
+        </h3>
 
-        <button
-          onclick="startGame()"
-          class="bg-blue-500 text-white px-4 py-2 rounded w-full mb-4 font-medium"
-        >
-          Siapkan Nomor
-        </button>
-
-        <div class="relative flex justify-center mb-4">
-          <canvas id="wheel" width="300" height="300" class="border rounded-full"></canvas>
-          <div class="absolute top-[-5px] text-red-600 text-2xl">▼</div>
+        <!-- WhatsApp Input -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium mb-2 text-left">
+            <i class="fas fa-phone mr-2 text-green-400"></i>Nomor WhatsApp
+          </label>
+          <div class="input-group">
+            <input type="text" id="wa" placeholder="08xxxxxxxxxx" class="input">
+            <i class="input-icon fab fa-whatsapp"></i>
+          </div>
         </div>
 
-        <button
-          onclick="spinWheel()"
-          class="bg-green-500 text-white px-4 py-3 rounded w-full font-bold text-lg"
-        >
+        <button onclick="startGame()" class="btn btn-primary w-full mb-6">
+          <i class="fas fa-play"></i>
+          Mulai Permainan
+        </button>
+
+        <!-- Wheel -->
+        <div class="relative flex justify-center mb-6">
+          <canvas id="wheel" width="300" height="300" class="border-4 border-white/20 rounded-full"></canvas>
+          <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2">
+            <div class="w-0 h-0 border-l-[15px] border-l-transparent border-r-[15px] border-r-transparent border-t-[25px] border-t-red-500 filter drop-shadow-lg"></div>
+          </div>
+        </div>
+
+        <button onclick="spinWheel()" id="spin-btn" class="btn btn-primary w-full text-lg py-4" disabled>
+          <i class="fas fa-sync-alt"></i>
           SPIN SEKARANG!
         </button>
 
-        <div id="result" class="mt-4 font-bold text-lg text-center"></div>
+        <div id="result" class="mt-6 text-center font-bold text-xl min-h-[60px] flex items-center justify-center"></div>
+      </div>
+
+      <!-- Stats & History -->
+      <div class="space-y-6">
+        
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="glass-card p-6 text-center animate-fade-in-up delay-2">
+            <div class="text-3xl mb-2">🎫</div>
+            <div class="text-2xl font-bold text-gradient" id="voucher-count">0</div>
+            <div class="text-sm text-muted">Voucher Dimiliki</div>
+          </div>
+          <div class="glass-card p-6 text-center animate-fade-in-up delay-3">
+            <div class="text-3xl mb-2">🎮</div>
+            <div class="text-2xl font-bold text-gradient" id="play-count">0</div>
+            <div class="text-sm text-muted">Kali Main</div>
+          </div>
+        </div>
+
+        <!-- Voucher List -->
+        <div class="glass-card p-6 animate-fade-in-up delay-4">
+          <h4 class="font-bold mb-4 flex items-center gap-2">
+            <i class="fas fa-ticket-alt text-yellow-400"></i>
+            Voucher Saya
+          </h4>
+          <div id="voucher-list" class="space-y-3">
+            <p class="text-muted text-sm text-center py-4">Belum ada voucher</p>
+          </div>
+        </div>
+
+        <!-- Info Card -->
+        <div class="glass-card p-6 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 animate-fade-in-up delay-5">
+          <h4 class="font-bold mb-3 flex items-center gap-2">
+            <i class="fas fa-info-circle text-cyan-400"></i>
+            Cara Main
+          </h4>
+          <ol class="text-sm text-secondary space-y-2">
+            <li class="flex items-start gap-2">
+              <span class="text-indigo-400 font-bold">1.</span>
+              Masukkan nomor WhatsApp
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-indigo-400 font-bold">2.</span>
+              Klik "Mulai Permainan"
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-indigo-400 font-bold">3.</span>
+              Klik "SPIN" dan selamat mencoba!
+            </li>
+          </ol>
+        </div>
       </div>
     </div>
-
-    <!-- My Vouchers -->
-    <div class="bg-white rounded-xl shadow p-6">
-      <h3 class="text-lg font-bold mb-4">🎫 Voucher Saya</h3>
-      <div id="voucher-list" class="space-y-3">
-        <p class="text-gray-500 text-center py-4">Belum ada voucher</p>
-      </div>
-    </div>
-
   </main>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      const html = document.documentElement;
+      const icon = document.getElementById('theme-icon');
+      
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.setAttribute('data-theme', 'light');
+        icon.className = 'fas fa-sun';
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        icon.className = 'fas fa-moon';
+      }
+    }
+  </script>
 
   <script type="module">
     import googleAuth from './js/auth/googleAuth.js';
@@ -91,7 +182,13 @@
     // Display user info
     document.getElementById('user-avatar').src = user.picture;
     document.getElementById('user-name').textContent = user.name;
-    document.getElementById('user-greeting').textContent = user.name || 'Siswa';
+    document.getElementById('welcome-name').textContent = user.name.split(' ')[0];
+
+    // Load WA from localStorage
+    const savedWa = localStorage.getItem('wa');
+    if (savedWa) {
+      document.getElementById('wa').value = savedWa;
+    }
 
     // Logout
     document.getElementById('logout-btn').addEventListener('click', () => {
@@ -103,4 +200,3 @@
 
 </body>
 </html>
-
